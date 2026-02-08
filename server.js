@@ -37,27 +37,30 @@ app.set("trust proxy", 1);
 app.use(cors({
   origin: [
     "http://localhost:5500",
-    "https://aimlrahulcounselling.netlify.app/"
+    "https://aimlrahulcounselling.netlify.app"
   ],
   credentials: true
 }));
 
+// ✅ allow preflight requests
+app.options("*", cors());
 
 app.use(express.json());
 
 app.use(session({
-  name: "cet.sid",          // 🔑 IMPORTANT: explicit cookie name
+  name: "cet.sid",
   secret: "cet-secret-key",
   resave: false,
   saveUninitialized: false,
-  proxy: true,              // 🔑 REQUIRED since you use trust proxy
+  proxy: true,
   cookie: {
     httpOnly: true,
-    secure: false,          // localhost = false
-    sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000 // 1 day
+    secure: true,       // ✅ REQUIRED for Netlify + Render
+    sameSite: "none",   // ✅ REQUIRED for cross-site
+    maxAge: 24 * 60 * 60 * 1000
   }
 }));
+
 
 
 
