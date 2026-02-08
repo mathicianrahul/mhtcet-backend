@@ -32,30 +32,30 @@ const requireAdmin = async (req, res, next) => {
 };
 
 
-app.set("trust proxy", 1);
 // ---------- MIDDLEWARE ----------
-const allowedOrigins = [
-  "http://localhost:5500",
-  "https://aimlrahulcounselling.netlify.app"
-];
+app.set("trust proxy", 1);
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow Postman
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5500",
+      "https://aimlrahulcounselling.netlify.app"
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+// Handle preflight properly
+app.options("*", cors({
+  origin: [
+    "http://localhost:5500",
+    "https://aimlrahulcounselling.netlify.app"
+  ],
+  credentials: true
 }));
 
-// ✅ REQUIRED for preflight
-app.options("*", cors());
 
 
 app.use(express.json());
