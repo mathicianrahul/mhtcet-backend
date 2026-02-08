@@ -34,8 +34,6 @@ const requireAdmin = async (req, res, next) => {
 
 app.set("trust proxy", 1);
 // ---------- MIDDLEWARE ----------
-const cors = require("cors");
-
 const allowedOrigins = [
   "http://localhost:5500",
   "https://aimlrahulcounselling.netlify.app"
@@ -43,13 +41,12 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // allow Postman
 
     if (allowedOrigins.includes(origin)) {
-      callback(null, true);
+      return callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      return callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
@@ -57,14 +54,15 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// VERY IMPORTANT: allow preflight
+// ✅ REQUIRED for preflight
 app.options("*", cors());
+
 
 app.use(express.json());
 
 app.use(session({
   name: "cet.sid",
-  secret: "cet-secret-key",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   proxy: true,
