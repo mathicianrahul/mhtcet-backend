@@ -37,7 +37,7 @@ app.set("trust proxy", 1);
 app.use(cors({
   origin: [
     "http://localhost:5500",
-    "https://your-frontend-domain.netlify.app"
+    "https://aimlrahulcounselling.netlify.app/"
   ],
   credentials: true
 }));
