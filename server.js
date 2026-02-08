@@ -47,14 +47,6 @@ app.use(
   })
 );
 
-// Handle preflight properly
-app.options("*", cors({
-  origin: [
-    "http://localhost:5500",
-    "https://aimlrahulcounselling.netlify.app"
-  ],
-  credentials: true
-}));
 
 
 
