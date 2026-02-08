@@ -35,7 +35,10 @@ const requireAdmin = async (req, res, next) => {
 app.set("trust proxy", 1);
 // ---------- MIDDLEWARE ----------
 app.use(cors({
-  origin: "http://localhost:5500",
+  origin: [
+    "http://localhost:5500",
+    "https://your-frontend-domain.netlify.app"
+  ],
   credentials: true
 }));
 
@@ -258,6 +261,9 @@ app.get("/api/admin/users", requireAdmin, async (req, res) => {
 
 
 // ---------- START SERVER ----------
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
+
